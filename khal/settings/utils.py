@@ -28,7 +28,12 @@ from os.path import expanduser, expandvars, join
 import pytz
 import xdg
 from tzlocal import get_localzone
-from validate import VdtValueError
+
+try:
+    # Available from configobj 5.1.0
+    from configobj.validate import VdtValueError
+except ModuleNotFoundError:
+    from validate import VdtValueError
 
 from ..khalendar.vdir import CollectionNotFoundError, Vdir
 from ..parse_datetime import guesstimedeltafstr

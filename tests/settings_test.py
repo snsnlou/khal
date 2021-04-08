@@ -9,7 +9,12 @@ from khal.settings.utils import (config_checks, get_all_vdirs,
                                  get_color_from_vdir, get_unique_name,
                                  is_color)
 from tzlocal import get_localzone
-from validate import VdtValueError
+
+try:
+    # Available from configobj 5.1.0
+    from configobj.validate import VdtValueError
+except ModuleNotFoundError:
+    from validate import VdtValueError
 
 from .utils import LOCALE_BERLIN
 

@@ -27,7 +27,12 @@ import xdg.BaseDirectory
 from configobj import (ConfigObj, ConfigObjError, flatten_errors,
                        get_extra_values)
 from khal import __productname__
-from validate import Validator
+
+try:
+    # Available from configobj 5.1.0
+    from configobj.validate import Validator
+except ModuleNotFoundError:
+    from validate import Validator
 
 from .exceptions import (CannotParseConfigFileError, InvalidSettingsError,
                          NoConfigFile)

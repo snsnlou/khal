@@ -13,8 +13,13 @@
 # serve to show the default.
 
 import khal
-import validate
 from configobj import ConfigObj
+
+try:
+    # Available from configobj 5.1.0
+    import configobj.validate
+except ModuleNotFoundError:
+    import validate
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
