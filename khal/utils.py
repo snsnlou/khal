@@ -31,7 +31,7 @@ from calendar import month_abbr, timegm
 from textwrap import wrap
 
 
-def generate_random_uid():
+def generate_random_uid() -> str:
     """generate a random uid
 
     when random isn't broken, getting a random UID from a pool of roughly 10^56

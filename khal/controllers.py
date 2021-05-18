@@ -26,6 +26,7 @@ import os
 import textwrap
 from collections import OrderedDict, defaultdict
 from shutil import get_terminal_size
+from typing import Dict, Iterable, Any
 
 import pytz
 from click import confirm, echo, prompt, style
@@ -121,18 +122,19 @@ def calendar(collection, agenda_format=None, notstarted=False, once=False, dater
     return merge_columns(calendar_column, event_column, width=lwidth)
 
 
-def start_end_from_daterange(daterange, locale,
-                             default_timedelta_date=dt.timedelta(days=1),
-                             default_timedelta_datetime=dt.timedelta(hours=1)):
+def start_end_from_daterange(
+    daterange: Iterable[str],
+    locale: Dict[Any, Any],
+    default_timedelta_date:dt.timedelta=dt.timedelta(days=1),
+    default_timedelta_datetime:dt.timedelta=dt.timedelta(hours=1),
+):
     """
     convert a string description of a daterange into start and end datetime
 
     if no description is given, return (today, today + default_timedelta_date)
 
     :param daterange: an iterable of strings that describes `daterange`
-    :type daterange: tuple
     :param locale: locale settings
-    :type locale: dict
     """
     if not daterange:
         start = dt.datetime(*dt.date.today().timetuple()[:3])
