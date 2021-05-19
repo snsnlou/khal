@@ -7,7 +7,8 @@ import errno
 import os
 import uuid
 
-from typing import Optional, Tuple  # noqa
+from typing import Optional, Tuple, Iterable  # noqa
+from ..custom_types import SupportsRaw
 
 from atomicwrites import atomic_write
 
@@ -187,7 +188,7 @@ class VdirBase:
     def _get_href(self, uid):
         return _generate_href(uid) + self.fileext
 
-    def list(self):
+    def list(self) -> Iterable[Tuple[str, str]]:
         for fname in os.listdir(self.path):
             fpath = os.path.join(self.path, fname)
             if os.path.isfile(fpath) and fname.endswith(self.fileext):
@@ -238,7 +239,7 @@ class VdirBase:
             else:
                 raise
 
-    def update(self, href, item, etag):
+    def update(self, href: str, item: SupportsRaw, etag: str) -> str:
         fpath = self._get_filepath(href)
         if not os.path.exists(fpath):
             raise NotFoundError(item.uid)

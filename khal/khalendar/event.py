@@ -25,7 +25,7 @@ helper functions."""
 import datetime as dt
 import logging
 import os
-from typing import Optional, List
+from typing import Optional, List, Dict
 
 import icalendar
 import pytz
@@ -97,7 +97,7 @@ class Event:
             raise TypeError('%s are invalid keyword arguments to this function' % kwargs.keys())
 
     @classmethod
-    def _get_type_from_vDDD(cls, start):
+    def _get_type_from_vDDD(cls, start: icalendar.prop.vDDDTypes) -> type:
         """
         :type start: icalendar.prop.vDDDTypes
         :type start: icalendar.prop.vDDDTypes
@@ -109,7 +109,7 @@ class Event:
         return FloatingEvent
 
     @classmethod
-    def _get_type_from_date(cls, start):
+    def _get_type_from_date(cls, start: dt.datetime) -> 'Event':
         if hasattr(start, 'tzinfo') and start.tzinfo is not None:
             cls = LocalizedEvent
         elif isinstance(start, dt.datetime):
@@ -119,7 +119,7 @@ class Event:
         return cls
 
     @classmethod
-    def fromVEvents(cls, events_list: List, ref: Optional[str]=None, **kwargs) -> 'Event':
+    def fromVEvents(cls, events_list: List[icalendar.cal.Event], ref: Optional[str]=None, **kwargs) -> 'Event':
         """
         :type events: list
         """
@@ -264,7 +264,7 @@ class Event:
             self._vevents[self.ref]['SEQUENCE'] = 0
 
     @property
-    def symbol_strings(self):
+    def symbol_strings(self) -> Dict[str, str]:
         if self._locale['unicode_symbols']:
             return {
                 'recurring': '\N{Clockwise gapped circle arrow}',
@@ -790,7 +790,7 @@ class AllDayEvent(Event):
             return self.end - self.start + dt.timedelta(days=1)
 
 
-def create_timezone(tz: dt.tzinfo, first_date: Optional[dt.datetime]=None, last_date: Optional[dt.datetime]=None) -> icalendar.Timezone:
+def create_timezone(tz: pytz.tzinfo.BaseTzInfo, first_date: Optional[dt.datetime]=None, last_date: Optional[dt.datetime]=None) -> icalendar.Timezone:
     """
     create an icalendar vtimezone from a pytz.tzinfo object
 

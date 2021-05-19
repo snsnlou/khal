@@ -88,7 +88,7 @@ class SQLiteDb:
         self._check_table_version()
 
     @contextlib.contextmanager
-    def at_once(self):
+    def at_once(self) -> 'SQLiteDb':
         assert not self._at_once
         self._at_once = True
         try:
@@ -416,7 +416,7 @@ class SQLiteDb:
         except IndexError:
             return None
 
-    def delete(self, href: str, etag: Any=None, calendar: str=None):
+    def delete(self, href: str, etag: str=None, calendar: str=None):
         """
         removes the event from the db,
 

@@ -30,7 +30,8 @@ import itertools
 import logging
 import os
 import os.path
-from typing import Any, Dict, Iterable, List, Optional, Tuple, Union  # noqa
+from typing import Any, Dict, Iterable, List, Optional, Tuple, Union, Set  # noqa
+from ..custom_types import CalendarConfiguration
 
 from . import backend
 from .event import Event
@@ -41,17 +42,6 @@ from .vdir import (AlreadyExistingError, CollectionNotFoundError, Vdir,
                    get_etag_from_file)
 
 logger = logging.getLogger('khal')
-
-from typing import TypedDict
-
-
-class CalendarConfiguration(TypedDict):
-    name: str
-    path: str
-    readonly: bool
-    color: str
-    priority: int
-    ctype: str
 
 
 def create_directory(path: str) -> None:
@@ -183,6 +173,7 @@ class CalendarCollection:
         assert event.etag is not None
         assert event.calendar is not None
         assert event.href is not None
+        assert event.raw is not None
         if self._calendars[event.calendar]['readonly']:
             raise ReadOnlyCalendarError()
         with self._backend.at_once():
@@ -251,6 +242,7 @@ class CalendarCollection:
                          etag: Optional[str]=None,
                          calendar: Optional[str]=None,
                          ) -> Event:
+        assert calendar is not None
         event = Event.fromString(
             item,
             locale=self._locale,
@@ -323,7 +315,7 @@ class CalendarCollection:
         """implements the actual db update on a per calendar base"""
         local_ctag = self._local_ctag(calendar)
         db_hrefs = {href for href, etag in self._backend.list(calendar)}
-        storage_hrefs = set()
+        storage_hrefs: Set[str] = set()
         bdays = self._calendars[calendar].get('ctype') == 'birthdays'
 
         with self._backend.at_once():
