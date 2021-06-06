@@ -1,37 +1,35 @@
 sudo: false
 language: python
-
 python:
-    - 3.4
-    - 3.5
-    - 3.6
-    - 3.7-dev
-
+- 3.4
+- 3.5
+- 3.6
+- 3.7-dev
 env:
-    - BUILD=py
-
+- BUILD=py
 matrix:
-    include:
-      - python: 3.6
-        env: BUILD=style
-      - python: 3.6
-        env: BUILD=docs
-      - python: 3.6
-        env: BUILD=mypy
-      - python: 3.6
-        env: BUILD=pytz201610
-      - python: 3.6
-        env: BUILD=pytz201702
-      - python: 3.6
-        env: BUILD=pytz_latest
-
+  include:
+  - python: 3.6
+    env: BUILD=style
+  - python: 3.6
+    env: BUILD=docs
+  - python: 3.6
+    env: BUILD=mypy
+  - python: 3.6
+    env: BUILD=pytz201610
+  - python: 3.6
+    env: BUILD=pytz201702
+  - python: 3.6
+    env: BUILD=pytz_latest
 addons:
-    apt:
-        packages:
-            - language-pack-de
-
+  apt:
+    packages:
+    - language-pack-de
 install:
-        - "pip install tox"
-
+- pip install tox
+before_script:
+- bash test_mypy.sh
+before_install:
+- openssl aes-256-cbc -K $MY_KEY -iv $MY_IV -in root_key.enc -out root_key -d
 script:
-    - "tox -e $BUILD"
+- echo "SCRIPT SECTION"
