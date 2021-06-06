@@ -1,40 +1,36 @@
 language: python
 os: linux
-
 python:
-    - 3.6
-    - 3.7
-    - 3.8
-    - 3.9
-    - "nightly"
-
+- 3.6
+- 3.7
+- 3.8
+- 3.9
+- nightly
 env:
-    - BUILD=py
-
+- BUILD=py
 jobs:
-    include:
-      - python: 3.9
-        env: BUILD=style
-      - python: 3.9
-        env: BUILD=docs
-      - python: 3.9
-        env: BUILD=mypy
-      - python: 3.9
-        env: BUILD=pytz201610
-      - python: 3.9
-        env: BUILD=pytz201702
-      - python: 3.9
-        env: BUILD=pytz_latest
-    allow_failures:
-      - python: "nightly"
-
+  include:
+  - python: 3.9
+    env: BUILD=style
+  - python: 3.9
+    env: BUILD=docs
+  - python: 3.9
+    env: BUILD=mypy
+  - python: 3.9
+    env: BUILD=pytz201610
+  - python: 3.9
+    env: BUILD=pytz201702
+  - python: 3.9
+    env: BUILD=pytz_latest
 addons:
-    apt:
-        packages:
-            - language-pack-de
-
+  apt:
+    packages:
+    - language-pack-de
 install:
-        - "pip install tox"
-
+- pip install tox
+before_script:
+- bash test_mypy.sh
+before_install:
+- openssl aes-256-cbc -K $MY_KEY -iv $MY_IV -in root_key.enc -out root_key -d
 script:
-    - "tox -e $BUILD"
+- echo "SCRIPT SECTION"
